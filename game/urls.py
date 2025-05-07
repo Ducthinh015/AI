@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import AIMoveAPIView
 
 urlpatterns = [
     path('init/', views.init_board, name='init_board'),
