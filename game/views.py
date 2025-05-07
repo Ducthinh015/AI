@@ -3,6 +3,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.parsers import JSONParser
+from rest_framework.views import APIView
+
 from .services import DraughtsGame
 
 game = DraughtsGame()
@@ -26,7 +28,6 @@ def get_moves(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def make_move(request):
-    # parser JSON tự động qua DRF nếu bạn đã cài JSONParser
     from_pos = request.data.get('from') or request.data.get('from_pos')
     to_pos   = request.data.get('to')   or request.data.get('to_pos')
 
@@ -44,3 +45,25 @@ def make_move(request):
     except Exception as e:
         return Response({"error": f"Lỗi không xác định: {str(e)}"},
                         status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class AIMoveAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, pk):
+        """
+        Trả về nước đi AI cho game có id=pk.
+        """
+        try:
+            # Giả sử bạn có method get_ai_move trong DraughtsGame
+            ai_move = game.get_ai_move(pk)
+            return Response({'ai_move': ai_move})
+        except AttributeError:
+            return Response(
+                {'error': 'Service get_ai_move chưa được triển khai.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            return Response(
+                {'error': f'Lỗi khi lấy nước đi AI: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
