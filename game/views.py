@@ -7,8 +7,15 @@ game = DraughtsGame()
 
 @api_view(['GET'])
 def init_board(request):
+    # Giả sử game.init_board() trả về một bảng cờ dưới dạng danh sách 2D
     board = game.init_board()
+    
+    # Kiểm tra xem board có đúng cấu trúc chưa
+    if board is None:
+        return Response({"error": "Không thể khởi tạo bàn cờ."}, status=status.HTTP_400_BAD_REQUEST)
+    
     return Response({'board': board})
+
 
 @api_view(['GET'])
 def get_moves(request):
