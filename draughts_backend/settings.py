@@ -9,6 +9,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
+    'django.contrib.admin', 
     'corsheaders',             # Phải nằm đầu
     'django.contrib.auth',
     'django.contrib.contenttypes',
